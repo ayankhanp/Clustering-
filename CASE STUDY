@@ -1,0 +1,88 @@
+# Strategic Business Analytics – Module 2  
+### Data Clustering, Segmentation, and Exploratory Analysis  
+*Using Python, Hierarchical Clustering, and Real-World Business Datasets*
+
+---
+
+## 📌 Overview
+
+This repository contains a complete analytical workflow for **Finding Groups Within Data**, based on the curriculum of the *Foundation to Strategic Business Analytics* course (ESSEC Business School / Coursera).  
+
+The project includes:
+
+- **SKU Sales Segmentation**  
+- **Human Resources Performance Clustering**  
+- **Telecommunications Customer Segmentation**  
+
+Each dataset is analyzed using **hierarchical clustering (Ward.D)**, **Euclidean distance**, and **variable scaling**, fully aligned with the methodology demonstrated in the course.
+
+---
+
+
+---
+
+## 🚀 Features
+
+### **1. SKU Dataset (Inventory / Operations Analytics)**  
+- Analyze variability & predictability using:
+  - Coefficient of Variation (CV)
+  - Average Daily Sales (ADS)
+- Visual segmentation:
+  - *Horses*, *Wild Bulls*, *Crickets*
+- Clustering validation using hierarchical clustering
+
+### **2. HR Dataset (People Analytics)**  
+- Variables used: Satisfaction, Evaluation, Number of Projects
+- Cluster employees into performance-behaviour groups
+- Compare medians & interpret managerial insights
+
+### **3. Telco Dataset (Customer Segmentation)**  
+- Identify 5 behavioural segments:
+  - Heavy Users, Young Adults, Silver, Professionals, Light Users
+- Compare consumption:
+  - Calls, Text, Data, Age, International Calls
+- Determine true/false statements for business decisions
+
+---
+
+## 🧠 Methods Used
+
+- **Hierarchical Clustering (Ward.D)**  
+- **Euclidean Distance Matrix**  
+- **Scaling (StandardScaler)**  
+- **Aggregated Cluster Statistics**  
+- **Segment Interpretation & Proportion Analysis**
+
+---
+
+## 🛠️ Technology Stack
+
+- Python 3.x  
+- pandas  
+- NumPy  
+- SciPy (linkage, fcluster)  
+- scikit-learn  
+- Google Colab (for file uploads)
+
+---
+
+## ▶️ Quick Start (Run in Google Colab)
+
+1. Upload the three datasets:
+   - `DATA_2.01_SKU.csv`  
+   - `DATA_2.02_HR.csv`  
+   - `DATA_2.03_Telco.csv`
+
+2. Run the clustering script:
+
+```python
+# Example: HR Clustering
+from sklearn.preprocessing import StandardScaler
+from scipy.cluster.hierarchy import linkage, fcluster
+
+X = hr[['S', 'LPE', 'NP']]
+sc = StandardScaler().fit_transform(X)
+Z = linkage(sc, method='ward')
+clusters = fcluster(Z, 2, criterion='maxclust')
+hr['cluster'] = clusters
+hr.groupby('cluster').median()
