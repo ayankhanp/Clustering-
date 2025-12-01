@@ -1,0 +1,36 @@
+This repository contains the full workflow for analyzing the SKU, HR, and Telecom datasets from the Foundation to Strategic Business Analytics (FSBA) course.
+It includes:
+Clean data loading
+Replication of the module’s clustering steps
+Computation of means, medians, and segments
+Colab-ready code
+FSBA-Module-2/
+│── DATA_2.01_SKU.csv
+│── DATA_2.02_HR.csv
+│── DATA_2.03_Telco.csv
+│── clustering_analysis.ipynb
+│── quiz_answers_code.py
+│── README.md
+ncluded Datasets
+1️ SKU Dataset — DATA_2.01_SKU.csv
+Contains:
+ADS — Average Daily Sales
+CV — Coefficient of Variation
+Used for clustering into:
+Horses · Wild Bulls · Crickets
+2️ HR Dataset — DATA_2.02_HR.csv
+Contains:
+S — Satisfaction
+LPE — Last Project Evaluation
+NP — Number of Projects
+ANH · TIC · Newborn
+Used for hierarchical clustering and segment-level statistics.
+3️ Telecom Dataset — DATA_2.03_Telco.csv
+Contains:
+Calls
+Intern
+Text
+Data
+Age
+Used to generate 5 telecom customer segments.
+
