@@ -1,0 +1,88 @@
+# ===============================
+# LOAD ALL DATASETS
+# ===============================
+
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from scipy.cluster.hierarchy import linkage, fcluster
+
+# Upload files in Colab:
+from google.colab import files
+print("Upload all CSV files: DATA_2.01_SKU.csv, DATA_2.02_HR.csv, DATA_2.03_Telco.csv")
+uploaded = files.upload()
+
+# Read files
+sku = pd.read_csv('DATA_2.01_SKU.csv')
+hr  = pd.read_csv('DATA_2.02_HR.csv')
+tel = pd.read_csv('DATA_2.03_Telco.csv')
+
+# ===============================
+# QUESTION 3 — HR SCATTER PLOT
+# ===============================
+
+import matplotlib.pyplot as plt
+
+plt.scatter(hr['NP'], hr['LPE'], alpha=0.6)
+plt.xlabel("Number of Projects (NP)")
+plt.ylabel("Last Project Evaluation (LPE)")
+plt.title("Q3 — HR Dataset: LPE vs NP")
+plt.show()
+
+# ===============================
+# QUESTION 4 — HR CLUSTERING (2 clusters)
+# ===============================
+
+X = hr[['S','LPE','NP']].copy()
+
+sc = StandardScaler().fit_transform(X)
+Z  = linkage(sc, method='ward')
+clusters = fcluster(Z, 2, criterion='maxclust')
+
+hr['cluster'] = clusters
+
+median_satisfaction = hr.groupby('cluster')['S'].median().sort_index()
+cluster_sizes = hr['cluster'].value_counts().sort_index()
+
+print("==== Q4: Median Satisfaction by Segment ====")
+print(median_satisfaction)
+print("Cluster sizes:", cluster_sizes)
+
+# ===============================
+# QUESTION 5 — TELCO CLUSTERING (5 clusters)
+# ===============================
+
+tel_scaled = StandardScaler().fit_transform(tel)
+Zt = linkage(tel_scaled, method='ward')
+tel_clusters = fcluster(Zt, 5, criterion='maxclust')
+
+tel['groups'] = tel_clusters
+
+agg = tel.groupby('groups').mean()
+
+proptemp = tel.groupby('groups')['Calls'].count()
+agg['proportion'] = proptemp / proptemp.sum()
+
+agg = agg.sort_values('proportion', ascending=False)
+agg.reset_index(inplace=True)
+agg = agg.round(2)
+
+print("\n==== Q5: Aggregated Telco Table ====")
+print(agg[['groups','Calls','Intern','Text','Data','Age','proportion']])
+
+# ===============================
+# STATEMENT CHECKS FOR QUIZ 5
+# ===============================
+
+idx_max_text = agg['Text'].idxmax()
+idx_max_data = agg['Data'].idxmax()
+idx_max_calls = agg['Calls'].idxmax()
+idx_min_text = agg['Text'].idxmin()
+
+any_zero_intern = (tel['Intern'] == 0).any()
+
+print("\n==== Q5 STATEMENT CHECKS ====")
+print("Max Text cluster:", agg.loc[idx_max_text])
+print("Max Data cluster:", agg.loc[idx_max_data])
+print("Max Calls cluster:", agg.loc[idx_max_calls])
+print("Min Text cluster:", agg.loc[idx_min_text])
+print("Any Intern=0 present?:", any_zero_intern)
